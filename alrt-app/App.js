@@ -22,7 +22,9 @@ export default class App extends Component {
       foregroundService: {
         notificationTitle: 'ALRT Tracker',
         notificationBody: 'Ensuring your safety'
-      }
+      },
+      timeInterval: 6000,
+      accuracy: Location.Accuracy.Balanced,
     });
   }
 
