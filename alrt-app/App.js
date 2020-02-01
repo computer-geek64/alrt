@@ -22,7 +22,9 @@ export default class App extends Component {
       foregroundService: {
         notificationTitle: 'ALRT Tracker',
         notificationBody: 'Ensuring your safety'
-      }
+      },
+      timeInterval: 6000,
+      accuracy: Location.Accuracy.Balanced,
     });
   }
 
@@ -66,6 +68,7 @@ TaskManager.defineTask('watch', ({ data: { locations = [] }, error }) => {
     return console.error(error)
   } else {
     sendToBack(locations[0]);
+    console.log(locations[0]);
   }
 })
 
