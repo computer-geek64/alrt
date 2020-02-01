@@ -16,6 +16,11 @@ def get_home():
     return render_template("home.html", title=app.config["API_NAME"] + " | Home", versions=versions, API_NAME=app.config["API_NAME"])
 
 
+# Location call
+@app.route()
+
+
+
 # Error handlers
 @app.errorhandler(404)
 def error_404(e):
