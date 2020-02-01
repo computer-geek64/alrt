@@ -1,9 +1,10 @@
 from datetime import datetime
 import requests
 import json
+import math
 from config import GOOGLE_MAPS_API_KEY
 
-def findPerson(person_latitude, person_longitude, person_altitude, person_velocity, disaster_latitude, disaster_longitude, disaster_type, last_time):
+def findPerson(person_latitude, person_longitude, person_altitude, person_velocity, disaster_type, last_time):
     if (disaster_type == "wildfire"):
         if (inBuilding(person_latitude, person_longitude)):
             return buildingRadius(last_time)
@@ -11,7 +12,7 @@ def findPerson(person_latitude, person_longitude, person_altitude, person_veloci
             return personRadius(last_time, person_velocity)
     if (disaster_type == "tsunami"):
         if (inBuilding(person_latitude, person_longitude)):
-            tsunami_safe_altitude = 100
+            tsunami_safe_altitude = 30 #in meters
             if (person_altitude > tsunami_safe_altitude):
                 return 0
             return buildingRadius(person_latitude, person_longitude, last_time)
@@ -42,7 +43,28 @@ def findPerson(person_latitude, person_longitude, person_altitude, person_veloci
             return radius
 
 def vectorAwayFromDisaster(person_latitude, person_longitude, disaster_latitude, disaster_longitude, radius):
+    lat_change = (-1 * (disaster_latitude-person_latitude))*69.172 #in miles
+    long_in_miles = math.cos(math.radians(person_latitude))*69.172
+    long_change = (-1 * (disaster_longitude-person_longitude))*long_in_miles
+    magnitude = math.sqrt(lat_change**2 + long_change**2)
+    lat_change = lat_change*radius/magnitude
+    long_change = long_change*radius/magnitude
+    new_latitude = person_latitude+(lat_change/69.172)
+    new_longitude = person_longitude+(long_change/(long_in_miles))
+    disaster_point = [new_latitude, new_longitude]
+    return disaster_point
 
+def personAwayFromDisaster(person_old_lat, person_old_long, person_new_lat, person_new_long, radius):
+    lat_change = -1 * (person_old_lat - person_new_lat)*69.172 #in miles
+    long_in_miles = math.cos(math.radians(person_new_lat)) * 69.172
+    long_change = -1 * (person_old_long - person_new_long)*long_in_miles #in miles
+    magnitude = math.sqrt(lat_change**2 + long_change**2)
+    lat_change = lat_change*radius/magnitude
+    long_change = long_change*radius/magnitude
+    new_latitude = person_new_lat+(lat_change/69.172)
+    new_longitude = person_new_long+(long_change/long_in_miles)
+    disaster_point = [new_latitude, new_longitude]
+    return disaster_point
 
 def buildingRadius(last_time):
     current_time = datetime.now().timestamp()
