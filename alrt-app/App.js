@@ -66,6 +66,7 @@ TaskManager.defineTask('watch', ({ data: { locations = [] }, error }) => {
     return console.error(error)
   } else {
     sendToBack(locations[0]);
+    console.log(locations[0]);
   }
 })
 
