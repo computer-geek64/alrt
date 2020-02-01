@@ -3,8 +3,9 @@ import requests
 import json
 import math
 from config import GOOGLE_MAPS_API_KEY
+from config import FIRES_API_KEY
 
-def findPerson(person_latitude, person_longitude, person_altitude, person_velocity, disaster_type, last_time):
+def findPerson(person_latitude, person_longitude, person_velocity, disaster_type, last_time):
     if (disaster_type == "wildfire"):
         if (inBuilding(person_latitude, person_longitude)):
             return buildingRadius(last_time)
@@ -12,14 +13,16 @@ def findPerson(person_latitude, person_longitude, person_altitude, person_veloci
             return personRadius(last_time, person_velocity)
     if (disaster_type == "tsunami"):
         if (inBuilding(person_latitude, person_longitude)):
-            tsunami_safe_altitude = 30 #in meters
-            if (person_altitude > tsunami_safe_altitude):
-                return 0
-            return buildingRadius(person_latitude, person_longitude, last_time)
+            # tsunami_safe_altitude = 30 #in meters
+            # if ((person_altitude) > tsunami_safe_altitude):
+            #     return 0
+            return buildingRadius(last_time)
         else:
             return personRadius(last_time, person_velocity)
     if (disaster_type == "earthquake"):
-        if (inBuilding(person_latitude, person_longitude, last_time)):
+        if (inBuilding(person_latitude, person_longitude)):
+            if (person_velocity == 0):  #trapped most likely
+                return 0
             return buildingRadius(last_time)
         else:
             return personRadius(last_time, person_velocity)
@@ -56,7 +59,7 @@ def vectorAwayFromDisaster(person_latitude, person_longitude, disaster_latitude,
 
 def personAwayFromDisaster(person_old_lat, person_old_long, person_new_lat, person_new_long, radius):
     lat_change = -1 * (person_old_lat - person_new_lat)*69.172 #in miles
-    long_in_miles = math.cos(math.radians(person_new_lat)) * 69.172
+    long_in_miles = math.cos(math.radians(person_new_lat))*69.172
     long_change = -1 * (person_old_long - person_new_long)*long_in_miles #in miles
     magnitude = math.sqrt(lat_change**2 + long_change**2)
     lat_change = lat_change*radius/magnitude
@@ -94,3 +97,10 @@ def inBuilding(person_latitude, person_longitude):
         if (abs(person_latitude-list['lat']) < 0.00005 and abs(person_longitude-list['lng']) < 0.00005):
             return True
     return False
+
+def getElevation(person_latitude, person_longitude):
+    r = requests.get("https://maps.googleapis.com/maps/api/elevation/json?locations="+str(person_latitude)+","+str(person_longitude)+"&key="+GOOGLE_MAPS_API_KEY)
+    json_obj = json.loads(r.text)
+    results = json_obj["results"]
+    elevation = results[0]["elevation"]
+    return elevation
