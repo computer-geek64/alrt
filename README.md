@@ -1,2 +1,6 @@
-# swamphacks
-Swamphacks VI Hackathon Project
+# ALRT (Automated Life Rescue Tracker)
+
+*SwampHacks VI Hackathon*
+
+---
+
