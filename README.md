@@ -29,7 +29,7 @@
 When the user downloads the app and verifies their credentials with our database, the app begins collecting the coordinates of the person every minute and creates a short path which the user travelled. During major natural disasters, the cell towers and any forms of connectivity are either taken out by the disaster or are intentionally taken down to prevent collateral damage. This means that if the user is within the vicinity of the disaster, their phone will likely lose connection and stop sending location data. When this occurs, the app takes the 3 most recent datapoints and create a predicted range of where the user could be based on calculated velocity. Additionally, we implemented a supervised machine learning algorithm that predicts a certain point where the user would be to help first-responders quickly and effectively find people in danger.
 
 ## Team: 
-*Yash Patel (@yashp121)*
-*Ashish D'Souza (@computer-geek64)*
-*Sharath Palathingal (@therealsharath)*
-*Pranav Pusarla(@PranavPusarla)*
+* *Yash Patel (@yashp121)*
+* *Ashish D'Souza (@computer-geek64)*
+* *Sharath Palathingal (@therealsharath)*
+* *Pranav Pusarla(@PranavPusarla)*
