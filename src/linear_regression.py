@@ -42,8 +42,8 @@ def predictPoint(latitudes, longitudes, radius):
         weight = session.run(W)
         bias = session.run(b)
 
-    latest_predicted_location = latitudes[119]*weight+bias
-    print(latitudes[119], latest_predicted_location)
+    latest_predicted_location = latitudes[-1]*weight+bias
+    print(latitudes[-1], latest_predicted_location)
     # x= latitudes
     # y = latitudes*weight+bias
     # plt.scatter(x,y)
@@ -51,18 +51,20 @@ def predictPoint(latitudes, longitudes, radius):
     degrees_of_latlong = radius/69.172
     change_in_y = math.sqrt((degrees_of_latlong)**2 / (1+(1/(weight**2))))
     change_in_x = change_in_y / weight
-    if (latitudes[0] < latitudes[n-1]):
-        new_latitude = latitudes[n-1] + change_in_x
+    if (latitudes[0] < latitudes[-1]):
+        new_latitude = latitudes[-1] + change_in_x
     else:
-        new_latitude = latitudes[n-1] - change_in_x
-    if (longitudes[0] < longitudes[n-1]):
-        new_longitude = longitudes[n-1] + change_in_y
+        new_latitude = latitudes[-1] - change_in_x
+    if (longitudes[0] < longitudes[-1]):
+        new_longitude = longitudes[-1] + change_in_y
     else:
-        new_longitude = longitudes[n-1] - change_in_y
+        new_longitude = longitudes[-1] - change_in_y
     return [new_latitude, new_longitude]
 
 latitudes = np.array([29.652106, 29.652106, 29.652109, 29.652118, 29.652082, 29.652133, 29.652146, 29.652155, 29.652158, 29.652152, 29.652146, 29.652149, 29.652142, 29.652063, 29.652194])
 longitudes = np.array([-82.350011, -82.350116, -82.350281, -82.35047, -82.350606, -82.350788, -82.350928, -82.351026, -82.351229, -82.351397, -82.351572, -82.351733, -82.35188, -82.352135, -82.352328])
 plt.scatter(latitudes, longitudes)
+point = predictPoint(latitudes, longitudes, 0.5)
+plt.scatter(point[0], point[1])
 plt.show()
-print(predictPoint(latitudes, longitudes, 1))
+print(point)

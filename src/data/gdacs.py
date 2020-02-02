@@ -23,7 +23,7 @@ def download_geojson():
     return os.path.dirname(__file__)
 
 
-def get_disasters(limit=5, filename="result.geojson"):
+def get_disasters(limit=5, filename=os.path.join(os.path.dirname(__file__), "result.geojson")):
     with open(filename, "r") as file:
         geojson = json.loads(file.read())
     disasters = []
