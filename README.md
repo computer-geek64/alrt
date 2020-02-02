@@ -20,6 +20,10 @@
 * **Custom Flask API**:outbox_tray:
   * We used a custom-built flask api to handle location updates from the mobile app and manage the MongoDB database.
 * **Tensorflow**:chart_with_upwards_trend:
-  * Using Tensorflow, we were able to implement a linear regression model using the user's recent location coordinates to give first-responders a prediction on where the user may be based on their previous environment and the type of weather danger.
+  * Using Tensorflow, we were able to implement a regression model using the user's recent location coordinates to give first-responders a prediction on where the user may be based on their previous environment and the type of weather danger.
 * **Google Firebase**:fire::lock:
   * Allows us to authenticate users and make sure their data is secured due to the nature of the data we collect (pinpoint location).
+
+## How it Works ##
+
+When the user downloads the app and verifies their credentials with our database, the app begins collecting the coordinates of the person every minute and creates a short path which the user travelled. During major natural disasters, the cell towers and any forms of connectivity are either taken out by the disaster or are intentionally taken down to prevent collateral damage. This means that if the user is within the vicinity of the disaster, their phone will likely lose connection and stop sending location data. When this occurs, the app takes the 3 most recent datapoints and create a predicted range of where the user could be based on calculated velocity. Additionally, we implemented a supervised machine learning algorithm that predicts a certain point where the user would be to help first-responders quickly and effectively find people in danger.
