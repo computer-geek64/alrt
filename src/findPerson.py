@@ -3,7 +3,7 @@ import requests
 import json
 import math
 from config import GOOGLE_MAPS_API_KEY
-from config import FIRES_API_KEY
+from linear_regression import predictPoint
 
 def findPerson(person_latitude, person_longitude, person_velocity, disaster_type, last_time):
     if (disaster_type == "wildfire"):
@@ -68,6 +68,10 @@ def personAwayFromDisaster(person_old_lat, person_old_long, person_new_lat, pers
     new_longitude = person_new_long+(long_change/long_in_miles)
     disaster_point = [new_latitude, new_longitude]
     return disaster_point
+
+def newPersonAwayFromDisaster(latitudes, longitudes, radius):
+    point = predictPoint(latitudes, longitudes, radius)
+    return point
 
 def buildingRadius(last_time):
     current_time = datetime.now().timestamp()
