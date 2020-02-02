@@ -1,23 +1,17 @@
-import requests
+#!/usr/bin/python3
+# wildfires.py
 
-def wildfires():
+import requests
+from datetime import datetime
+
+
+def get_wildfires():
     url = "https://satepsanone.nesdis.noaa.gov/pub/FIRE/HMS/latesthmshysplit.txt"
-    r = requests.get(url)
-    data = r.text
-    longitude = []
-    latitude = []
-    year = []
-    date = []
-    time = []
-    duration = []
-    statList = data.replace(" ", "").splitlines()
-    for element in statList[1:]:
-        element = element.split(",")
-        longitude.append(element[0])
-        latitude.append(element[1])
-        year.append(element[2][:4])
-        date.append(element[2][4:])
-        time.append(element[3])
-        duration.append(element[4])
-    finaltup = (longitude, latitude, year, date, time, duration)
-    return finaltup
+    response = requests.get(url)
+    lines = response.text.replace(" ", "").strip().split("\n")[1:]
+    output = []
+    for line in lines:
+        field = line.split(",")
+        time = datetime.strptime(field[2] + field[3], "%Y%m%d%H%M").timestamp()
+        output.append({"type": "wildfire", "lat": field[0], "lon": field[1], "time": time})
+    return output

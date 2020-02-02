@@ -21,7 +21,7 @@ def download_geojson():
     return os.path.dirname(__file__)
 
 
-def get_disasters(filename, limit):
+def get_disasters(limit=5, filename="result.geojson"):
     with open(filename, "r") as file:
         geojson = json.loads(file.read())
     disasters = []
@@ -33,28 +33,24 @@ def get_disasters(filename, limit):
                 "type": "earthquake",
                 "lat": geojson["features"][i]["properties"]["latitude"],
                 "lon": geojson["features"][i]["properties"]["longitude"],
-                "from": datetime.strptime(geojson["features"][i]["properties"]["fromdate"], "%d/%b/%Y %H:%M:%S").timestamp(),
-                "to": datetime.strptime(geojson["features"][i]["properties"]["todate"], "%d/%b/%Y %H:%M:%S").timestamp()
+                "time": datetime.strptime(geojson["features"][i]["properties"]["todate"], "%d/%b/%Y %H:%M:%S").timestamp(),
+                "magnitude": float(geojson["features"][i]["properties"]["severity"])
             })
         elif geojson["features"][i]["properties"]["eventtype"] == "FL":
             # Flood/Tsunami
             disasters.append({
-                "type": "Flood",
+                "type": "flood",
                 "lat": geojson["features"][i]["properties"]["latitude"],
                 "lon": geojson["features"][i]["properties"]["longitude"],
-                "from": datetime.strptime(geojson["features"][i]["properties"]["fromdate"], "%d/%b/%Y %H:%M:%S").timestamp(),
-                "to": datetime.strptime(geojson["features"][i]["properties"]["todate"], "%d/%b/%Y %H:%M:%S").timestamp()
+                "time": datetime.strptime(geojson["features"][i]["properties"]["todate"], "%d/%b/%Y %H:%M:%S").timestamp()
             })
         elif geojson["features"][i]["properties"]["eventtype"] == "TC":
             # Tropical Cyclone/Hurricane
             disasters.append({
-                "type": "Tropical Cyclone/Hurricane",
+                "type": "hurricane",
                 "lat": geojson["features"][i]["properties"]["latitude"],
                 "lon": geojson["features"][i]["properties"]["longitude"],
-                "from": datetime.strptime(geojson["features"][i]["properties"]["fromdate"], "%d/%b/%Y %H:%M:%S").timestamp(),
-                "to": datetime.strptime(geojson["features"][i]["properties"]["todate"], "%d/%b/%Y %H:%M:%S").timestamp()
+                "time": datetime.strptime(geojson["features"][i]["properties"]["todate"], "%d/%b/%Y %H:%M:%S").timestamp()
             })
         i += 1
     return disasters
-
-print(get_disasters("result.geojson", 5))

@@ -17,6 +17,7 @@ limiter = Limiter(app, key_func=get_remote_address)
 
 # Home
 @app.route(app.config["HOME"], methods=["GET"])
+@limiter.limit("1/s")
 def get_home():
     return "Welcome to " + app.config["API_NAME"] + "!", 200
 
