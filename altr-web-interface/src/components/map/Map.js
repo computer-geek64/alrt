@@ -1,5 +1,6 @@
-import React, { Component } from 'react'
-import MapBackGround from './MapBackGround'
+import React, { Component } from 'react';
+import MapBackGround from './MapBackGround';
+import SimpleMap from './SimpleMap';
 
 class Map extends Component {
   render() {
@@ -7,6 +8,9 @@ class Map extends Component {
     return (
       <>
         <MapBackGround />
+        <div>
+          <SimpleMap />
+        </div>
       </>
     )
   }

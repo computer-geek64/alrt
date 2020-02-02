@@ -11,11 +11,11 @@
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/alrtLogo.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/alrtSplash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#ade2ff"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
