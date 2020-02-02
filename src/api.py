@@ -17,7 +17,6 @@ limiter = Limiter(app, key_func=get_remote_address)
 
 # Home
 @app.route(app.config["HOME"], methods=["GET"])
-@limiter.limit("1/s")
 def get_home():
     return "Welcome to " + app.config["API_NAME"] + "!", 200
 
@@ -30,9 +29,10 @@ def api_endpoint():
 
 # Update Location
 @app.route(safe_join(app.config["HOME"], "api", "alrt", "v1", "update_location"), methods=["POST"])
+@limiter.limit("1/second")
 def update_location():
     data = json.loads(request.data.decode())
-    user_data = {"lat": data["coords"]["latitude"], "lon": data["coords"]["longitude"], "time": data["timestamp"]}
+    user_data = {"lat": data["coords"]["latitude"], "lon": data["coords"]["longitude"], "time": data["timestamp"] / 1000}
     mongo.add_user_documents([user_data], "sample_user0")
     return "Success!", 200
 

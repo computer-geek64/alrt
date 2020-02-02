@@ -6,6 +6,7 @@ import json
 from subprocess import Popen
 from datetime import datetime
 from selenium import webdriver
+from time import sleep
 from selenium.webdriver.firefox.options import Options
 
 
@@ -16,8 +17,9 @@ def download_geojson():
     browser = webdriver.Firefox(firefox_profile=profile, options=options)
     browser.get("https://gdacs.org/Alerts/default.aspx")
     browser.find_element_by_id("iconDownload").click()
+    sleep(1)
     browser.close()
-    Popen(["mv", "/root/Downloads/result.geojson", "."])
+    Popen(["mv", "/root/Downloads/result.geojson", os.path.dirname(__file__)])
     return os.path.dirname(__file__)
 
 
