@@ -8,5 +8,5 @@
   ![Flask](https://www.olirowan.xyz/static/images/icons/flask-plain.svg)
   ![React](https://img.icons8.com/ios/150/000000/react-native.png)
   ![Selenium](https://github.com/computer-geek64/alrt/blob/master/assets/img/Selenium.png)
-  ![Mongo](https://github.com/computer-geek64/alrt/blob/master/assets/img/mongo.jpg)
+  ![Mongo](https://github.com/computer-geek64/alrt/blob/master/assets/img/mongo2.png)
   ![Tensorflow](https://github.com/computer-geek64/alrt/blob/master/assets/img/tensor.png)
