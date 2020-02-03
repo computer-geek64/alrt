@@ -10,13 +10,16 @@ from sympy.solvers import solve
 
 
 def predict_point(x_data, y_data, radius, disaster_coords):
+    x_data = np.array(x_data)
+    y_data = np.array(y_data)
+
     x = tf.placeholder(tf.float32)
     y = tf.placeholder(tf.float32)
 
     w = tf.Variable(np.random.randn(), name="W")
     b = tf.Variable(np.random.randn(), name="b")
 
-    learning_rate = 0.01
+    learning_rate = 0.0001
     epochs = 1000
 
     # Hypothesis
@@ -45,6 +48,8 @@ def predict_point(x_data, y_data, radius, disaster_coords):
         weight = sess.run(w)
         bias = sess.run(b)
 
+    print(weight)
+    print(bias)
     var = Symbol("x")
     results = solve((var - x_data[-1]) ** 2 + (weight * var + bias - y_data[-1]) ** 2 - radius ** 2, var)
     distances = [geopy.distance.distance((x_data[0], y_data[0]), (x, weight * x + bias)).mi for x in results]
@@ -53,6 +58,9 @@ def predict_point(x_data, y_data, radius, disaster_coords):
     else:
         predicted_regression_point = (float(results[1]), float(weight * results[1] + bias))
 
+    print(disaster_coords)
+    print(y_data[-1])
+    print(x_data[-1])
     m = (disaster_coords[1] - y_data[-1]) / (disaster_coords[0] - x_data[-1])
     b = y_data[-1] - m * x_data[-1]
     var = Symbol("x")

@@ -37,8 +37,8 @@ while True:
     documents = gdacs.get_disasters() + wildfires.get_wildfires()
     mongo.add_disaster_documents(documents)
     client = pymongo.MongoClient("mongodb+srv://" + MONGODB_USER + ":" + MONGODB_PASS + "@alrt-ypzt7.mongodb.net/test?retryWrites=true&w=majority")
-    for user in client["users"].list_collection_names():
-        mongo.cleanup_user(user)
+    #for user in client["users"].list_collection_names():
+    #    mongo.cleanup_user(user)
     for disaster in client["disasters"].list_collection_names():
         mongo.cleanup_disaster(disaster)
     db = client["alerts"]

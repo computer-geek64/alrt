@@ -4,13 +4,14 @@
 import os
 import json
 import math
+import gmplot
 import pymongo
 from datetime import datetime
 from data import mongo
 from data import predict
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-from flask import Flask, jsonify, redirect, request, render_template, url_for, safe_join
+from flask import Flask, jsonify, redirect, request, render_template, url_for, safe_join, send_from_directory
 
 
 app = Flask(__name__, template_folder="templates")
@@ -48,7 +49,7 @@ def get_users():
     user_collection = db["users"]
     results = list(user_collection.find())
     client.close()
-    return jsonify(results), 200
+    return jsonify([x["user"] for x in results]), 200
 
 
 # Get plotting coordinate points
@@ -70,12 +71,19 @@ def get_points(user):
         time_elapsed = (datetime.now().timestamp() - data["last_location"]["time"]) / 60 / 60
         radius = 4 * time_elapsed - (2 ** (time_elapsed / 4 - 2)) / math.log(2) + 1 / (4 * math.log(2))
         predicted_point = predict.predict_point(x, y, radius, (data["disaster"]["lat"], data["disaster"]["lon"]))
-        json_response = {"disaster": [{"latitudeP": predicted_point[0], "longitudeP": predicted_point[1], "latitudeL": x[-1], "longitudeL": y[-1], "latitudeD": data["disaster"]["lat"], "longitudeD": data["disaster"]["lon"], "radius": radius}]}
+        json_response = {"latitudeP": predicted_point[0], "longitudeP": predicted_point[1], "latitudeL": x[-1], "longitudeL": y[-1], "latitudeD": data["disaster"]["lat"], "longitudeD": data["disaster"]["lon"], "radius": radius}
         client.close()
-        return jsonify(json_response), 200
+        gmap = gmplot.GoogleMapPlotter(x[-1], y[-1], 16)
+        gmap.circle(x[-1], y[-1], radius * 1609.34, "blue")
+        gmap.marker(x[-1], y[-1], "blue")
+        gmap.marker(predicted_point[0], predicted_point[1], "green")
+        gmap.marker(data["disaster"]["lat"], data["disaster"]["lon"], "red")
+        gmap.draw(os.path.join(os.path.dirname(__file__), "map.html"))
+        return send_from_directory(os.path.dirname(__file__), filename="map.html"), 200
+        # return jsonify(json_response), 200
     results = client["users"][user].find().sort("time", pymongo.DESCENDING).limit(1)[0]
     client.close()
-    return jsonify({"disaster": [{"latitudeL": results["lat"], "longitudeL": results["lon"]}]}), 200
+    return jsonify({"latitudeL": results["lat"], "longitudeL": results["lon"]}), 200
 
 # Error handlers
 @app.errorhandler(404)

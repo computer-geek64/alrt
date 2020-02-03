@@ -33,8 +33,8 @@ def get_disasters(limit=5, filename=os.path.join(os.path.dirname(__file__), "res
             # Earthquake
             disasters.append({
                 "type": "earthquake",
-                "lat": geojson["features"][i]["properties"]["latitude"],
-                "lon": geojson["features"][i]["properties"]["longitude"],
+                "lat": float(geojson["features"][i]["properties"]["latitude"]),
+                "lon": float(geojson["features"][i]["properties"]["longitude"]),
                 "time": datetime.strptime(geojson["features"][i]["properties"]["todate"], "%d/%b/%Y %H:%M:%S").timestamp(),
                 "magnitude": float(geojson["features"][i]["properties"]["severity"])
             })
@@ -42,16 +42,16 @@ def get_disasters(limit=5, filename=os.path.join(os.path.dirname(__file__), "res
             # Flood/Tsunami
             disasters.append({
                 "type": "flood",
-                "lat": geojson["features"][i]["properties"]["latitude"],
-                "lon": geojson["features"][i]["properties"]["longitude"],
+                "lat": float(geojson["features"][i]["properties"]["latitude"]),
+                "lon": float(geojson["features"][i]["properties"]["longitude"]),
                 "time": datetime.strptime(geojson["features"][i]["properties"]["todate"], "%d/%b/%Y %H:%M:%S").timestamp()
             })
         elif geojson["features"][i]["properties"]["eventtype"] == "TC":
             # Tropical Cyclone/Hurricane
             disasters.append({
                 "type": "hurricane",
-                "lat": geojson["features"][i]["properties"]["latitude"],
-                "lon": geojson["features"][i]["properties"]["longitude"],
+                "lat": float(geojson["features"][i]["properties"]["latitude"]),
+                "lon": float(geojson["features"][i]["properties"]["longitude"]),
                 "time": datetime.strptime(geojson["features"][i]["properties"]["todate"], "%d/%b/%Y %H:%M:%S").timestamp()
             })
         i += 1

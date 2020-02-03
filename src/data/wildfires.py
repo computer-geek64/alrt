@@ -13,5 +13,5 @@ def get_wildfires():
     for line in lines:
         field = line.split(",")
         time = datetime.strptime(field[2] + field[3], "%Y%m%d%H%M").timestamp()
-        output.append({"type": "wildfire", "lat": field[0], "lon": field[1], "time": time})
+        output.append({"type": "wildfire", "lat": float(field[1]), "lon": float(field[0]), "time": time})
     return output
